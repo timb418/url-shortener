@@ -48,7 +48,7 @@ func shortenGivenLink(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "text/plain")
 
-	fmt.Fprintln(w, shortenedURL)
+	fmt.Fprint(w, shortenedURL)
 }
 
 func getFullLinkByShort(w http.ResponseWriter, r *http.Request) {
