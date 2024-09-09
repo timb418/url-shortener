@@ -52,10 +52,10 @@ func shortenGivenLink(w http.ResponseWriter, r *http.Request) {
 }
 
 func getFullLinkByShort(w http.ResponseWriter, r *http.Request) {
-	shortId := r.PathValue("id")
+	shortID := r.PathValue("id")
 	w.Header().Set("Content-Type", "text/plain")
 
-	original, err := linkStorage.GetOriginal(shortId)
+	original, err := linkStorage.GetOriginal(shortID)
 
 	if err != nil {
 		http.Error(w, "URL not found", http.StatusBadRequest)
