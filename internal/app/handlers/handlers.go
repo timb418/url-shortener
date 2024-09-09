@@ -32,8 +32,9 @@ func shortenGivenLink(w http.ResponseWriter, r *http.Request) {
 
 	// Получаем строку URL
 	originalURL := strings.TrimSpace(string(body))
-	if originalURL == "" {
-		http.Error(w, "Empty URL", http.StatusBadRequest)
+	if originalURL == "" ||
+		(!strings.HasPrefix(originalURL, "http://") && !strings.HasPrefix(originalURL, "https://")) {
+		http.Error(w, "Wrong URL", http.StatusBadRequest)
 		return
 	}
 
