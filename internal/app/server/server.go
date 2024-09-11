@@ -1,9 +1,9 @@
 package server
 
 import (
-	"net/http"
+	"github.com/gorilla/mux"
 )
 
-func NewServer() *http.ServeMux {
-	return http.NewServeMux()
+func NewRouter() *mux.Router {
+	return mux.NewRouter()
 }

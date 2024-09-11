@@ -10,16 +10,18 @@ import (
 	"strings"
 
 	"github.com/timb418/url-shortener/internal/app/storage"
+
+	"github.com/gorilla/mux"
 )
 
 var linkStorage = storage.NewLinkStorage()
 
-func RegisterRoutes(mux *http.ServeMux) {
-	mux.HandleFunc("/", shortenGivenLink)
-	mux.HandleFunc("/{id}", getFullLinkByShort)
+func RegisterRoutes(mux *mux.Router) {
+	mux.HandleFunc("/", ShortenGivenLink).Methods("POST")
+	mux.HandleFunc("/{id}", GetFullLinkByShort).Methods("GET")
 }
 
-func shortenGivenLink(w http.ResponseWriter, r *http.Request) {
+func ShortenGivenLink(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusBadRequest)
 		return
@@ -46,15 +48,14 @@ func shortenGivenLink(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "text/plain")
+	w.WriteHeader(http.StatusCreated)
 
-	fmt.Fprint(w, "http://localhost:8080/" + shortenedURL)
+	fmt.Fprint(w, "http://localhost:8080/"+shortenedURL)
 }
 
-func getFullLinkByShort(w http.ResponseWriter, r *http.Request) {
-	shortID := r.PathValue("id")
-	w.Header().Set("Content-Type", "text/plain")
+func GetFullLinkByShort(w http.ResponseWriter, r *http.Request) {
+	shortID := strings.TrimPrefix(r.URL.Path, "/")
 
 	original, err := linkStorage.GetOriginal(shortID)
 
@@ -62,6 +63,7 @@ func getFullLinkByShort(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "URL not found", http.StatusBadRequest)
 		return
 	}
+	w.Header().Set("Content-Type", "text/plain")
 	w.Header().Set("Location", original)
 	w.WriteHeader(http.StatusTemporaryRedirect)
 }
