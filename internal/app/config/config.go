@@ -2,17 +2,26 @@ package config
 
 import (
 	"flag"
+	"os"
 )
 
 type Config struct {
-	Address string
-	BaseURL string
+	Address string `env:"SERVER_ADDRESS"`
+	BaseURL string `env:"BASE_URL"`
 }
 
 var config Config
 
 func NewConfig() *Config {
 	flag.Parse()
+
+	if envRunAddr := os.Getenv("SERVER_ADDRESS"); envRunAddr != "" {
+		config.Address = envRunAddr
+	}
+
+	if envbaseUrl := os.Getenv("BASE_URL"); envbaseUrl != "" {
+		config.Address = envbaseUrl
+	}
 
 	return &config
 }
