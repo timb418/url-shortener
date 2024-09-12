@@ -20,7 +20,7 @@ func NewConfig() *Config {
 	}
 
 	if envbaseURL := os.Getenv("BASE_URL"); envbaseURL != "" {
-		config.Address = envbaseURL
+		config.BaseURL = envbaseURL
 	}
 
 	return &config
