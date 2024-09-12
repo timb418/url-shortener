@@ -9,6 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/timb418/url-shortener/internal/app/config"
 )
 
 func TestShorten(t *testing.T) {
@@ -63,7 +64,7 @@ func TestShorten(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			request := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(test.reqBody))
 			w := httptest.NewRecorder()
-			ShortenGivenLink(w, request)
+			ShortenGivenLink(w, request, config.NewConfig().BaseURL)
 
 			res := w.Result()
 			assert.Equal(t, test.want.code, res.StatusCode)
