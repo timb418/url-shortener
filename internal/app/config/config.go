@@ -19,8 +19,8 @@ func NewConfig() *Config {
 		config.Address = envRunAddr
 	}
 
-	if envbaseUrl := os.Getenv("BASE_URL"); envbaseUrl != "" {
-		config.Address = envbaseUrl
+	if envbaseURL := os.Getenv("BASE_URL"); envbaseURL != "" {
+		config.Address = envbaseURL
 	}
 
 	return &config
