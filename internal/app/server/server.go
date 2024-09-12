@@ -1,9 +1,7 @@
 package server
 
-import (
-	"github.com/gorilla/mux"
-)
+import "github.com/go-chi/chi"
 
-func NewRouter() *mux.Router {
-	return mux.NewRouter()
+func NewRouter() *chi.Mux {
+	return chi.NewRouter()
 }

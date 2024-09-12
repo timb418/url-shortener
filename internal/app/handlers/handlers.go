@@ -9,16 +9,15 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/go-chi/chi"
 	"github.com/timb418/url-shortener/internal/app/storage"
-
-	"github.com/gorilla/mux"
 )
 
 var linkStorage = storage.NewLinkStorage()
 
-func RegisterRoutes(mux *mux.Router) {
-	mux.HandleFunc("/", ShortenGivenLink).Methods("POST")
-	mux.HandleFunc("/{id}", GetFullLinkByShort).Methods("GET")
+func RegisterRoutes(mux *chi.Mux) {
+	mux.Post("/", ShortenGivenLink)
+	mux.Get("/{id}", GetFullLinkByShort)
 }
 
 func ShortenGivenLink(w http.ResponseWriter, r *http.Request) {
