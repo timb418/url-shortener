@@ -5,20 +5,22 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/middleware"
+	"github.com/timb418/url-shortener/internal/app/config"
 	"github.com/timb418/url-shortener/internal/app/handlers"
 	"github.com/timb418/url-shortener/internal/app/server"
 )
 
 func main() {
+	cfg := config.NewConfig()
+
 	router := server.NewRouter()
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
 
-	handlers.RegisterRoutes(router)
+	handlers.RegisterRoutes(router, cfg.BaseURL)
 
-	log.Println("Server initialized")
-	log.Println("Starting server on :8080")
-	if err := http.ListenAndServe(":8080", router); err != nil {
+	log.Printf("Starting server on %s\n", cfg.Address)
+	if err := http.ListenAndServe(cfg.Address, router); err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
 }
