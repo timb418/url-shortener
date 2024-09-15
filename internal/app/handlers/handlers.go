@@ -14,6 +14,7 @@ import (
 )
 
 var linkStorage = storage.NewLinkStorage()
+var hasher = sha256.New()
 
 func RegisterRoutes(mux *chi.Mux, baseURL string) {
 	mux.Post("/", func(w http.ResponseWriter, r *http.Request) {
@@ -70,7 +71,6 @@ func GetFullLinkByShort(w http.ResponseWriter, r *http.Request) {
 }
 
 func generateShortLink(long string) string {
-	hasher := sha256.New()
 	hasher.Write([]byte(long))
 	hash := hasher.Sum(nil)
 	shortURL := base64.URLEncoding.EncodeToString(hash)[:8]
