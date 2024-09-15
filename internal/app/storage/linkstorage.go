@@ -1,8 +1,9 @@
 package storage
 
 import (
-	"errors"
 	"sync"
+
+	"github.com/timb418/url-shortener/internal/app/storageerrors"
 )
 
 type LinkStorage struct {
@@ -24,10 +25,10 @@ func (ls *LinkStorage) StoreLink(originalURL, shortURL string) error {
 
 	// Check if the original URL or short URL already exists
 	if _, exists := ls.originalToShort[originalURL]; exists {
-		return errors.New("original URL already exists")
+		return storageerrors.ErrOriginalUrlAlreadyExists
 	}
 	if _, exists := ls.shortToOriginal[shortURL]; exists {
-		return errors.New("short URL already exists")
+		return storageerrors.ErrShortlUrlAlreadyExists
 	}
 
 	// Store the mappings
@@ -43,7 +44,7 @@ func (ls *LinkStorage) GetOriginal(shortURL string) (string, error) {
 
 	originalURL, exists := ls.shortToOriginal[shortURL]
 	if !exists {
-		return "", errors.New("short URL not found")
+		return "", storageerrors.ErrShortUrlNotFound
 	}
 
 	return originalURL, nil
@@ -55,7 +56,7 @@ func (ls *LinkStorage) GetShortened(originalURL string) (string, error) {
 
 	shortURL, exists := ls.originalToShort[originalURL]
 	if !exists {
-		return "", errors.New("original URL not found")
+		return "", storageerrors.ErrOriginalUrlNotFound
 	}
 
 	return shortURL, nil

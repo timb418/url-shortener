@@ -14,13 +14,16 @@ import (
 )
 
 var linkStorage = storage.NewLinkStorage()
+var hasher = sha256.New()
 
-func RegisterRoutes(mux *chi.Mux) {
-	mux.Post("/", ShortenGivenLink)
+func RegisterRoutes(mux *chi.Mux, baseURL string) {
+	mux.Post("/", func(w http.ResponseWriter, r *http.Request) {
+		ShortenGivenLink(w, r, baseURL)
+	})
 	mux.Get("/{id}", GetFullLinkByShort)
 }
 
-func ShortenGivenLink(w http.ResponseWriter, r *http.Request) {
+func ShortenGivenLink(w http.ResponseWriter, r *http.Request, baseURL string) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusBadRequest)
 		return
@@ -50,7 +53,7 @@ func ShortenGivenLink(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusCreated)
 
-	fmt.Fprint(w, "http://localhost:8080/"+shortenedURL)
+	fmt.Fprint(w, baseURL+"/"+shortenedURL)
 }
 
 func GetFullLinkByShort(w http.ResponseWriter, r *http.Request) {
@@ -68,7 +71,6 @@ func GetFullLinkByShort(w http.ResponseWriter, r *http.Request) {
 }
 
 func generateShortLink(long string) string {
-	hasher := sha256.New()
 	hasher.Write([]byte(long))
 	hash := hasher.Sum(nil)
 	shortURL := base64.URLEncoding.EncodeToString(hash)[:8]
