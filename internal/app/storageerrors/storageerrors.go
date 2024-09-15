@@ -3,8 +3,8 @@ package storageerrors
 import "errors"
 
 var (
-	ErrOriginalUrlAlreadyExists error = errors.New("original URL already exists")
-	ErrShortlUrlAlreadyExists error = errors.New("short URL already exists")
-	ErrShortUrlNotFound         error = errors.New("short URL not found")
-	ErrOriginalUrlNotFound      error = errors.New("original URL not found")
+	ErrOriginalURLAlreadyExists error = errors.New("original URL already exists")
+	ErrShortlURLAlreadyExists error = errors.New("short URL already exists")
+	ErrShortURLNotFound         error = errors.New("short URL not found")
+	ErrOriginalURLNotFound      error = errors.New("original URL not found")
 )
