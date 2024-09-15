@@ -25,10 +25,10 @@ func (ls *LinkStorage) StoreLink(originalURL, shortURL string) error {
 
 	// Check if the original URL or short URL already exists
 	if _, exists := ls.originalToShort[originalURL]; exists {
-		return storageerrors.ErrOriginalUrlAlreadyExists
+		return storageerrors.ErrOriginalURLAlreadyExists
 	}
 	if _, exists := ls.shortToOriginal[shortURL]; exists {
-		return storageerrors.ErrShortlUrlAlreadyExists
+		return storageerrors.ErrShortlURLAlreadyExists
 	}
 
 	// Store the mappings
@@ -44,7 +44,7 @@ func (ls *LinkStorage) GetOriginal(shortURL string) (string, error) {
 
 	originalURL, exists := ls.shortToOriginal[shortURL]
 	if !exists {
-		return "", storageerrors.ErrShortUrlNotFound
+		return "", storageerrors.ErrShortURLNotFound
 	}
 
 	return originalURL, nil
@@ -56,7 +56,7 @@ func (ls *LinkStorage) GetShortened(originalURL string) (string, error) {
 
 	shortURL, exists := ls.originalToShort[originalURL]
 	if !exists {
-		return "", storageerrors.ErrOriginalUrlNotFound
+		return "", storageerrors.ErrOriginalURLNotFound
 	}
 
 	return shortURL, nil
