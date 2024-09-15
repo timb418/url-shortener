@@ -71,6 +71,7 @@ func GetFullLinkByShort(w http.ResponseWriter, r *http.Request) {
 }
 
 func generateShortLink(long string) string {
+	hasher.Reset()
 	hasher.Write([]byte(long))
 	hash := hasher.Sum(nil)
 	shortURL := base64.URLEncoding.EncodeToString(hash)[:8]
